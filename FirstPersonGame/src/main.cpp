@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "WindowManager.h"
+#include "UtilityFunctions.h"
 
 namespace HelloTriangle
 {
@@ -30,7 +31,7 @@ namespace HelloTriangle
 
 	int main()
 	{
-		WindowManager windowManager(width, height);
+		WindowManager& windowManager = WindowManager::getSizedManager(width, height);
 		Shader shader(vertextShader, fragmentShader);
 
 		std::vector<float> vertices = {
