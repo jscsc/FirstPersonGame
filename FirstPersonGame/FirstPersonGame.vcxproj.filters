@@ -36,7 +36,7 @@
     <ClCompile Include="src\GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestLauncher.cpp">
+    <ClCompile Include="src\tests\TestLauncher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,7 +56,7 @@
     <ClInclude Include="src\GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestLauncher.h">
+    <ClInclude Include="src\tests\TestLauncher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

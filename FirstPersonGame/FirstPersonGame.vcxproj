@@ -192,7 +192,7 @@
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\UtilityFunctions.cpp" />
     <ClCompile Include="src\WindowManager.cpp" />
-    <ClCompile Include="TestLauncher.cpp" />
+    <ClCompile Include="src\tests\TestLauncher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameManager.h" />
@@ -200,7 +200,7 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\UtilityFunctions.h" />
     <ClInclude Include="src\WindowManager.h" />
-    <ClInclude Include="TestLauncher.h" />
+    <ClInclude Include="src\tests\TestLauncher.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\basic_fragment.glsl" />

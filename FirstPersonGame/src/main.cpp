@@ -1,7 +1,7 @@
 #include "GameManager.h"
 
 #ifdef RUN_TESTS
-#include "..\TestLauncher.h"
+#include "./tests/TestLauncher.h"
 #endif //RUN_TESTS
 
 
