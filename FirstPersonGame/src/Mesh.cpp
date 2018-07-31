@@ -2,7 +2,7 @@
 
 
 
-Mesh::Mesh(std::vector<float> vertices)
+Mesh::Mesh(std::vector<float> vertices, std::vector<AttribPointerConfig> configs)
 {
 	glGenVertexArrays(1, &_VAO);
 	glBindVertexArray(_VAO);
@@ -13,13 +13,18 @@ Mesh::Mesh(std::vector<float> vertices)
 	// Buffer the data
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
 
+	// This is the total floats in vertex data
+	unsigned int configItemsPerVertex = 0;
 
-	// TODO: Generalize fields and functions 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), reinterpret_cast<void*>(0));
-	glEnableVertexAttribArray(0); 			  
+	for (AttribPointerConfig config : configs)
+	{
+		glVertexAttribPointer(config.index, config.size, config.type, config.normalized, config.stride, reinterpret_cast<void*>(config.pointerOffset));
+		glEnableVertexAttribArray(config.index);
+		configItemsPerVertex += config.size;
+	}
 	glBindVertexArray(0);
-	// TODO: figure out from params
-	_numOfVertices = 3;
+
+	_numOfVertices = vertices.size() / configItemsPerVertex;
 }
 
 

@@ -47,13 +47,26 @@ void GameManager::gameLoop()
 
 	Shader shader(vertexShaderSrc, fragmentShaderSrc);
 
-	std::vector<float> vertices = {
+	std::vector<float> vertices =
+	{
 		-0.5f, -0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
 		0.0f, 0.5f, 0.0f
 	};
 
-	Mesh mesh(vertices);
+	AttribPointerConfig layoutConfig =
+	{
+		0,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		3 * sizeof(float),
+		0
+	};
+	std::vector<AttribPointerConfig> layoutConfigs;
+	layoutConfigs.push_back(layoutConfig);
+
+	Mesh mesh(vertices, layoutConfigs);
 	shader.bind();
 
 	while (!windowManager.windowShouldClose())

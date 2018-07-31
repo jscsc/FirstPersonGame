@@ -4,6 +4,17 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
+struct AttribPointerConfig
+{
+	// 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), reinterpret_cast<void*>(0));
+	GLuint index;
+	GLint size;
+	GLenum type;
+	GLboolean normalized;
+	GLsizei stride;
+	GLvoid * pointerOffset;
+};
+
 class Mesh
 {
 
@@ -16,7 +27,7 @@ private:
 
 public:
 
-	Mesh(std::vector<float> vertices);
+	Mesh(std::vector<float> vertices, std::vector<AttribPointerConfig> configs);
 
 	virtual ~Mesh();
 
