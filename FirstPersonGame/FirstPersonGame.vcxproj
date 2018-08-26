@@ -189,6 +189,7 @@
     <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\network\NetworkManager.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\UtilityFunctions.cpp" />
     <ClCompile Include="src\WindowManager.cpp" />
@@ -196,6 +197,7 @@
     <ClCompile Include="src\tests\TestBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\network\NetworkManager.h" />
     <ClInclude Include="src\tests\NetworkConnectionTest.h" />
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\Mesh.h" />
