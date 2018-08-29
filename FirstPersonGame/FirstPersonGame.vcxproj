@@ -202,6 +202,7 @@
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\tests\NetworkManagerConnectTest.h" />
     <ClInclude Include="src\utilities\smart_ptr_typedefs.h" />
     <ClInclude Include="src\UtilityFunctions.h" />
     <ClInclude Include="src\WindowManager.h" />
