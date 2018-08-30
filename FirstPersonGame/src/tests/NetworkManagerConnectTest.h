@@ -24,6 +24,7 @@ public:
 		NetworkManager client;
 		client.connectToHost("125.125.125.125", 25565);
 
+		_passedTest = false;
 		return _passedTest;
 	}
 

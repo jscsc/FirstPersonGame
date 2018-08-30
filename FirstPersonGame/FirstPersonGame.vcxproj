@@ -185,7 +185,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\network\ConnectionObject.cpp" />
+    <ClCompile Include="src\network\Client.cpp" />
     <ClCompile Include="external_libraries\glad_src_file\glad.c" />
+    <ClCompile Include="src\network\Host.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -197,6 +200,9 @@
     <ClCompile Include="src\tests\TestBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\network\ConnectionObject.h" />
+    <ClInclude Include="src\network\Client.h" />
+    <ClInclude Include="src\network\Host.h" />
     <ClInclude Include="src\network\NetworkManager.h" />
     <ClInclude Include="src\tests\NetworkConnectionTest.h" />
     <ClInclude Include="src\GameManager.h" />

@@ -1,12 +1,16 @@
 #include "TestLauncher.h"
 #include <iostream>
+#include "..\utilities\smart_ptr_typedefs.h"
 #include "NetworkConnectionTest.h"
+#include "NetworkManagerConnectTest.h"
 
 void TestLauncher::GenerateTests()
 {
 	_tests = 
 	{ 
-		new_sp<NetworkConnectionTest>()
+		new_sp<NetworkConnectionTest>(),
+		new_sp<NetworkManagerConnectTest>() 
+
 	};
 }
 
