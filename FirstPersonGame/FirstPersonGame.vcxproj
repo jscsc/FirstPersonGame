@@ -200,6 +200,7 @@
     <ClCompile Include="src\tests\TestBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\data_structures\ConcurrentQueue.h" />
     <ClInclude Include="src\network\ConnectionObject.h" />
     <ClInclude Include="src\network\Client.h" />
     <ClInclude Include="src\network\Host.h" />

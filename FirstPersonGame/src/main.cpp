@@ -7,7 +7,6 @@
 
 int main()
 {
-
 #ifdef RUN_TESTS
 	TestLauncher test_suite;
 	test_suite.launchTests();

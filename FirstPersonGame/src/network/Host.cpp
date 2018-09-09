@@ -112,4 +112,5 @@ Host::~Host()
 	//thus, we want to make sure the thread is already closed before we destory this object
 	stopListenThread = true;
 	listenThread->join();
+	hostListener.close();
 }
