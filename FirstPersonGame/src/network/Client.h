@@ -14,17 +14,19 @@ class Client : public ConnectionObject
 private: 
 	short ID;
 	sp<sf::TcpSocket> socket;
-	sp<thread> writeThread;
-	sp<thread> readThread;
+	sp<thread> sendThread;
+	sp<thread> receiveThread;
 
-	ConcurrentQueue<sf::Packet> writeQueue;
-	ConcurrentQueue<sf::Packet> readQueue;
+	ConcurrentQueue<sf::Packet> sendQueue;
+	ConcurrentQueue<sf::Packet> receiveQueue;
 
 	bool stopThreads = false;
 	bool needsIDFromNetwork = false;
 
-	void thread_writingThread();
-	void thread_readingThread();
+	void thread_send();
+	void thread_receive();
+
+	void getIDFromPacket(sf::Packet& packet);
 
 public:
 	Client(sp<sf::TcpSocket> inSocket);

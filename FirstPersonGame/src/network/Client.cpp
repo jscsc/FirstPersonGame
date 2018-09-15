@@ -2,18 +2,23 @@
 #include <chrono>
 
 // trust we will get an ID by design
-void Client::thread_writingThread()
+void Client::thread_send()
 {
 	using namespace std::chrono_literals;
 
 	while (needsIDFromNetwork)
 	{
 		std::this_thread::sleep_for(1s);
+
+		if (stopThreads)
+		{
+			return;
+		}
 	}
 	
-	while (true)
+	while (!stopThreads)
 	{
-		sp<sf::Packet> packet = writeQueue.dequeueCopy(); 
+		sp<sf::Packet> packet = sendQueue.dequeueCopy(); 
 
 		if (packet)
 		{
@@ -24,26 +29,51 @@ void Client::thread_writingThread()
 		}
 		else
 		{
-			std::this_thread::sleep_for(166ms);
-		}
-
-		if (stopThreads)
-		{
-			break;
+			std::this_thread::sleep_for(166ms); // one frame
 		}
 
 	}
 
 }
 
-void Client::thread_readingThread()
+void Client::thread_receive()
 {
-	// wait for ID if flag true
+	if (!socket)
+	{
+		return;
+	}
+
+	if (needsIDFromNetwork)
+	{
+		sf::Packet packet;
+		socket->receive(packet);
+		getIDFromPacket(packet);
+	}
 	
-	// while not shutdown:
-	//  listen for incoming packet (use selector to sleep for X time)
-	//  store packet in queue
-	//  check for shutdown
+
+	sf::SocketSelector timeoutManager;
+	timeoutManager.add(*socket);
+
+	while (!stopThreads)
+	{
+
+		if (timeoutManager.wait(sf::seconds(1)))
+		{
+			if (timeoutManager.isReady(*socket))
+			{
+				sp<sf::Packet> packet = new_sp<sf::Packet>();
+				socket->receive(*packet);
+				receiveQueue.enqueueCopy(packet);
+			}
+		}
+
+	}
+}
+
+void Client::getIDFromPacket(sf::Packet& packet)
+{
+	packet >> ID;
+	needsIDFromNetwork = false;
 }
 
 Client::Client(sp<sf::TcpSocket> inSocket)
@@ -51,21 +81,21 @@ Client::Client(sp<sf::TcpSocket> inSocket)
 {
 	needsIDFromNetwork = true;
 
-	writeThread = sp<thread>(new thread(&Client::thread_writingThread, this));
-	readThread = sp<thread>(new thread(&Client::thread_readingThread, this));
+	sendThread = sp<thread>(new thread(&Client::thread_send, this));
+	receiveThread = sp<thread>(new thread(&Client::thread_receive, this));
 }
 
 Client::Client(short inID, sp<sf::TcpSocket> inSocket)
 	: ID(inID), socket(inSocket)
 {
-	writeThread = sp<thread>(new thread(&Client::thread_writingThread, this));
-	readThread = sp<thread>(new thread(&Client::thread_readingThread, this));
+	sendThread = sp<thread>(new thread(&Client::thread_send, this));
+	receiveThread = sp<thread>(new thread(&Client::thread_receive, this));
 }
 
 Client::~Client()
 {
 	stopThreads = true;
-	writeThread->join();
-	readThread->join();
+	sendThread->join();
+	receiveThread->join();
 	socket->disconnect();
 }
