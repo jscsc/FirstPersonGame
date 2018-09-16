@@ -1,12 +1,38 @@
 #include "Client.h"
 #include <chrono>
+#include <iostream>
+
+void Client::thread_connectToHost()
+{
+	using namespace std::chrono_literals;
+
+	while (!stopThreads)
+	{
+		if (shouldAttemptConnect)
+		{
+			if (socket)
+			{
+				if (socket->connect(connectedIP, connectedPort) == sf::Socket::Status::Done)
+				{
+					isConnected = true;
+				}
+			}
+			shouldAttemptConnect = false;
+		}
+		else
+		{
+			std::this_thread::sleep_for(1s);
+		}
+	}
+}
 
 // trust we will get an ID by design
 void Client::thread_send()
 {
 	using namespace std::chrono_literals;
 
-	while (needsIDFromNetwork)
+	// process all waits at the same location
+	while (!isConnected || needsIDFromNetwork)
 	{
 		std::this_thread::sleep_for(1s);
 
@@ -38,9 +64,21 @@ void Client::thread_send()
 
 void Client::thread_receive()
 {
+	using namespace std::chrono_literals;
 	if (!socket)
 	{
+		stopThreads = true;
 		return;
+	}
+
+	//process all waits here
+	while (!isConnected)
+	{
+		std::this_thread::sleep_for(1s);
+		if (stopThreads)
+		{
+			return;
+		}
 	}
 
 	if (needsIDFromNetwork)
@@ -95,7 +133,43 @@ Client::Client(short inID, sp<sf::TcpSocket> inSocket)
 Client::~Client()
 {
 	stopThreads = true;
-	sendThread->join();
-	receiveThread->join();
+	
+	//join threads because all threads should be joined before dtor, otherwise crash.
+	if (sendThread)
+	{
+		sendThread->join();
+	}
+	if (receiveThread)
+	{
+		receiveThread->join();
+	}
+	if (connectThread)
+	{
+		connectThread->join();
+	}
+
 	socket->disconnect();
+}
+
+void Client::connect(const std::string& ip, unsigned short port)
+{
+	if (isConnected)
+	{
+		//disconnect();
+		std::cerr << "already connected " << std::endl;
+		return;
+	}
+
+	isConnected = false;
+	connectedIP = ip;
+	connectedPort = port;
+
+	//make sure this flag is set after the new ip and port is set.
+	shouldAttemptConnect = true;
+
+	if (!connectThread)
+	{
+		//only make a connect thread if one is not yet made
+		connectThread = sp<std::thread>(new thread(&Client::thread_connectToHost, this));
+	}
 }

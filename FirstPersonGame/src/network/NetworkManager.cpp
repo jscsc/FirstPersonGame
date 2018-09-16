@@ -14,9 +14,9 @@ NetworkManager::~NetworkManager()
 
 void NetworkManager::connectToHost(std::string ip, unsigned short port)
 {
-	sp<sf::TcpSocket> socket = new_sp<sf::TcpSocket>();
-	//sp<Client> client = new_sp<Client>(std::move(socket));
-
+	sp<Client> client = new_sp<Client>(new_sp<sf::TcpSocket>());
+	client->connect(ip, port);
+	currentConnection = client;
 }
 
 void NetworkManager::hostOnPort(unsigned short targetPort)
