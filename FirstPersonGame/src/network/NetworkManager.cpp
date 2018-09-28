@@ -12,7 +12,7 @@ NetworkManager::~NetworkManager()
 {
 }
 
-void NetworkManager::connectToHost(std::string ip, unsigned short port)
+void NetworkManager::connectToHost(const sf::IpAddress& ip, unsigned short port)
 {
 	sp<Client> client = new_sp<Client>(new_sp<sf::TcpSocket>());
 	client->connect(ip, port);

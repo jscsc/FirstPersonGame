@@ -3,6 +3,7 @@
 #include "..\utilities\smart_ptr_typedefs.h"
 #include <thread>
 #include <SFML/Network.hpp>
+#include "NetworkTypedefs.h"
 #include "..\data_structures\ConcurrentQueue.h"
 
 class Client : public ConnectionObject
@@ -11,9 +12,9 @@ class Client : public ConnectionObject
 	using thread = std::thread;
 
 private: 
-	short ID;
+	IdType ID;
 	sp<sf::TcpSocket> socket;
-	std::string connectedIP;
+	sf::IpAddress connectedIP;
 	unsigned short connectedPort;
 
 	// IO operations
@@ -36,12 +37,12 @@ private:
 
 public:
 	Client(sp<sf::TcpSocket> inSocket);
-	Client(short inID, sp<sf::TcpSocket> inSocket);
+	Client(IdType inID, sp<sf::TcpSocket> inSocket);
 	~Client();
 
 	virtual bool isActive() override { return true; }
 	virtual void disconnect() override  { throw std::runtime_error("not implemented"); }
-	virtual void sendPacket(sf::Packet packet, short sendIdOverride = -1) override {}
-	void connect(const std::string& ip, unsigned short port);
+	virtual void sendPacket(sf::Packet& packet, IdType sendToId= -1) override;
+	void connect(const sf::IpAddress& ip, unsigned short port);
 };
 

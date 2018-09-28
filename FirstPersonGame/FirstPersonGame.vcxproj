@@ -205,11 +205,13 @@
     <ClInclude Include="src\network\Client.h" />
     <ClInclude Include="src\network\Host.h" />
     <ClInclude Include="src\network\NetworkManager.h" />
+    <ClInclude Include="src\network\NetworkTypedefs.h" />
     <ClInclude Include="src\tests\NetworkConnectionTest.h" />
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\tests\NetworkManagerConnectTest.h" />
+    <ClInclude Include="src\utilities\datastructure_typedefs.h" />
     <ClInclude Include="src\utilities\smart_ptr_typedefs.h" />
     <ClInclude Include="src\UtilityFunctions.h" />
     <ClInclude Include="src\WindowManager.h" />

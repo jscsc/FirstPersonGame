@@ -18,11 +18,14 @@ public:
 	{
 		AutoLogger logger(_passedTest, "network connection");
 
+		sf::IpAddress localAddress = sf::IpAddress::getLocalAddress();
+		unsigned short port = 25565;
+
 		NetworkManager host;
-		host.hostOnPort(25565);
+		host.hostOnPort(port);
 
 		NetworkManager client;
-		client.connectToHost("125.125.125.125", 25565);
+		client.connectToHost(localAddress, port);
 
 		_passedTest = false;
 		return _passedTest;

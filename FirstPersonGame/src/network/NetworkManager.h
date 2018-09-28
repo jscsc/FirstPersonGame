@@ -15,7 +15,7 @@ public:
 	NetworkManager();
 	~NetworkManager();
 
-	void connectToHost(std::string ip, unsigned short port);
+	void connectToHost(const sf::IpAddress& ip, unsigned short port);
 
 	void hostOnPort(unsigned short targetPort);
 

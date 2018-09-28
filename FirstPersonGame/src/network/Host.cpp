@@ -1,4 +1,5 @@
 #include "Host.h"
+#include "Client.h"
 
 
 
@@ -43,21 +44,28 @@ void Host::thread_listenForIncomingConnections()
 	}
 }
 
-void Host::handleNewClientReceived(sp<sf::TcpSocket>& newClient)
+void Host::handleNewClientReceived(sp<sf::TcpSocket>& newClientSocket)
 {
 	//assign an id
-	short newId = hostGrantNewID();
+	IdType newId = hostGrantNewID();
 
 	//create a client that will:
-		//start a write thread
-		//start a read thread
-		//send newid over the write thread as the first message so client knows its id.
+	sp<Client> newClient = new_sp<Client>(newId, newClientSocket);
 
-	//this should store the new client in a container
-		//perhaps a hashmap/bst(map) keyed on id?
+	//let actual connected client know its assigned ID
+	sf::Packet idPacket;
+	idPacket << newId;
+	newClient->sendPacket(idPacket);
+
+	//store the client
+	if (clients.find(newId) != clients.end())
+	{
+		std::runtime_error("fatal network error : new client's id already in client data structure");
+	}
+	clients[newId] = newClient;
 }
 
-short Host::hostGrantNewID()
+IdType Host::hostGrantNewID()
 {
 	//TODO: add a pool of IDs to get from first because people may disconnect from the server
 	return startId++;
@@ -71,6 +79,7 @@ void Host::threadCloseCheck()
 void Host::disconnect()
 {
 	//TODO - make a test for this
+	throw std::runtime_error("not implmented - please make a unit test when implmementing!");
 }
 
 bool Host::isConnectionActive()

@@ -44,7 +44,7 @@ void Client::thread_send()
 	
 	while (!stopThreads)
 	{
-		sp<sf::Packet> packet = sendQueue.dequeueCopy(); 
+		sp<sf::Packet> packet = sendQueue.dequeue(); 
 
 		if (packet)
 		{
@@ -101,7 +101,7 @@ void Client::thread_receive()
 			{
 				sp<sf::Packet> packet = new_sp<sf::Packet>();
 				socket->receive(*packet);
-				receiveQueue.enqueueCopy(packet);
+				receiveQueue.enqueue(packet);
 			}
 		}
 
@@ -123,9 +123,11 @@ Client::Client(sp<sf::TcpSocket> inSocket)
 	receiveThread = sp<thread>(new thread(&Client::thread_receive, this));
 }
 
-Client::Client(short inID, sp<sf::TcpSocket> inSocket)
+Client::Client(IdType inID, sp<sf::TcpSocket> inSocket)
 	: ID(inID), socket(inSocket)
 {
+	needsIDFromNetwork = false;
+
 	sendThread = sp<thread>(new thread(&Client::thread_send, this));
 	receiveThread = sp<thread>(new thread(&Client::thread_receive, this));
 }
@@ -151,7 +153,13 @@ Client::~Client()
 	socket->disconnect();
 }
 
-void Client::connect(const std::string& ip, unsigned short port)
+void Client::sendPacket(sf::Packet& packet, IdType sendToId/*= -1*/)
+{
+	sp<sf::Packet> packetCopy = new_sp<sf::Packet>(packet);
+	sendQueue.enqueue(packetCopy);
+}
+
+void Client::connect(const sf::IpAddress& ip, unsigned short port)
 {
 	if (isConnected)
 	{

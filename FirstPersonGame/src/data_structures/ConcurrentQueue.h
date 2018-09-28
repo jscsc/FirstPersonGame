@@ -15,12 +15,12 @@ public:
 	ConcurrentQueue() = default;
 	~ConcurrentQueue() = default;
 
-	void enqueueCopy(sp<T>& toCopy);
-	sp<T> dequeueCopy();
+	void enqueue(sp<T>& toCopy);
+	sp<T> dequeue();
 };
 
 template <typename T>
-sp<T> ConcurrentQueue<T>::dequeueCopy()
+sp<T> ConcurrentQueue<T>::dequeue()
 {
 	std::lock_guard<std::mutex> lock(mut);
 
@@ -35,7 +35,7 @@ sp<T> ConcurrentQueue<T>::dequeueCopy()
 }
 
 template <typename T>
-void ConcurrentQueue<T>::enqueueCopy(sp<T>& toCopy)
+void ConcurrentQueue<T>::enqueue(sp<T>& toCopy)
 {
 	std::lock_guard<std::mutex> lock(mut);
 	queue.push(toCopy);
